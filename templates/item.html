@@ -8,11 +8,12 @@
 </head>
 <body>
     <h1> Имя:{{ item.name }} </h1> 
+    <h3> Brand:{{ item.brand }} </h3> 
     <p>Количество: 
-        {% if item.quantity == 0 %}
+        {% if item.count == 0 %}
             Товара нет</p>
         {% else %}
-            {{ item.quantity }}</p>
+            {{ item.count }}</p>
         {% endif %}
     <a href='/items'> Назад </a>
 </body>

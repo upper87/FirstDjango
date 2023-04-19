@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
+from MainApp.models import Item
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def home(request):
@@ -31,32 +33,37 @@ def about(request):
     """
     return HttpResponse(result)
 
-items = [
-   {"id": 1, "name": "Кроссовки abibas" ,"quantity":5},
-   {"id": 2, "name": "Куртка кожаная" ,"quantity":2},
-   {"id": 3, "name": "Coca-cola 1 литр" ,"quantity":12},
-   {"id": 4, "name": "Картофель фри" ,"quantity":0},
-   {"id": 5, "name": "Кепка" ,"quantity":124},
-]
+# items = [
+#    {"id": 1, "name": "Кроссовки abibas" ,"quantity":5},
+#    {"id": 2, "name": "Куртка кожаная" ,"quantity":2},
+#    {"id": 3, "name": "Coca-cola 1 литр" ,"quantity":12},
+#    {"id": 4, "name": "Картофель фри" ,"quantity":0},
+#    {"id": 5, "name": "Кепка" ,"quantity":124},
+# ]
 
 breadcrumbs = [
     {"page": "Главная" ,"link":"/"}
 ]
 
 def get_item(request, id):
-    for item in items:
-        if item["id"] == id:
+    # for item in items:
+    #     if item["id"] == id:
             # res = f"""
             # <h1> Имя:{item["name"]} </h1>
             # <a href='/items'> Назад </a>
             # """
             # return HttpResponse(res)
-            context = {
-                "item": item
-            }
-            return render(request, "item.html", context)
+    try:
+        item = Item.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound("""<h1>Товара нету</h1>""")
+    context = {
+        "item": item
+        }
+        
+    return render(request, "item.html", context)
     # print(f"{id=}, {type(id) = }")
-    return HttpResponseNotFound("""<h1>Товара нету</h1>""")
+    # return HttpResponseNotFound("""<h1>Товара нету</h1>""")
 
 
 def get_items(request):
@@ -65,6 +72,7 @@ def get_items(request):
     #     res_items += f"""<li><a href="item/{item["id"]}">{item['name']}</a></li>"""
     # res_items += "</ol>"
     # return HttpResponse(res_items)
+    items = Item.objects.all()
     context = {
         "items": items
     }
