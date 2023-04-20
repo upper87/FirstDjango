@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'inc-menu.html' %}
+    <h1> Имя:{{ item.name }} </h1> 
+    <h3> Brand:{{ item.brand }} </h3> 
+    <p>Количество: 
+        {% if item.count == 0 %}
+            Товара нет</p>
+        {% else %}
+            {{ item.count }}</p>
+        {% endif %}
+    <a href='{% url 'items-list' %}'> Назад </a>
+
+{% endblock %}
